@@ -1,2 +1,4 @@
 .env
 Dockerfile
+.idea
+config.yaml
