@@ -11,8 +11,10 @@ type Config struct {
 	DBPass       string        `mapstructure:"postgres_password"`
 	DBPort       int           `mapstructure:"postgres_port"`
 	DBName       string        `mapstructure:"postgres_db"`
+	SSLMode      string        `mapstructure:"postgres_ssl_mode"`
 	JWTSecretKey string        `mapstructure:"jwt_secret_key"`
 	TokenTTL     time.Duration `mapstructure:"token_ttl"`
+	StartPort    string        `mapstructure:"start_port"`
 }
 
 func LoadConfig() (config Config, err error) {

@@ -7,7 +7,7 @@ import (
 )
 
 type UserRepository interface {
-	Create(ctx context.Context, user entity.User) (int64, error)
+	Create(ctx context.Context, user *entity.User) (int64, error)
 	GetByEmail(ctx context.Context, email string) (*entity.User, error)
 }
 

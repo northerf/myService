@@ -14,8 +14,8 @@ func NewUserRepo(db *sqlx.DB) *UserRepo {
 	return &UserRepo{db: db}
 }
 
-func (r *UserRepo) Create(ctx context.Context, user entity.User) (int64, error) {
-	query := `INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id`
+func (r *UserRepo) Create(ctx context.Context, user *entity.User) (int64, error) {
+	query := `INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3) RETURNING id`
 	row := r.db.QueryRowContext(ctx, query, user.Name, user.Email, user.PasswordHash)
 
 	if err := row.Scan(&user.ID); err != nil {
@@ -26,7 +26,7 @@ func (r *UserRepo) Create(ctx context.Context, user entity.User) (int64, error) 
 
 func (r *UserRepo) GetByEmail(ctx context.Context, email string) (*entity.User, error) {
 	user := entity.User{}
-	query := `SELECT id, username, email FROM users WHERE email = $1`
+	query := `SELECT id, name, email, password_hash FROM users WHERE email = $1`
 	err := r.db.GetContext(ctx, &user, query, email)
 	if err != nil {
 		return nil, err

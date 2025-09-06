@@ -46,9 +46,11 @@ func (s *AuthService) GenerateToken(ctx context.Context, email string, password 
 	if err != nil {
 		return "", errors.New("user not found, unable to generate token")
 	}
+
 	if bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)) != nil {
 		return "", errors.New("passwords do not match")
 	}
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"email": email,
 		"exp":   time.Now().Add(s.TokenTTL).Unix(),
