@@ -1,7 +1,7 @@
 package service
 
 import (
-	"awesomeProject1/internal/repository"
+	"awesomeProject1/users/internal/repository"
 	"context"
 	"time"
 )

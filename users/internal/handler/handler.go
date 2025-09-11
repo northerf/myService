@@ -1,16 +1,21 @@
 package handler
 
 import (
-	"awesomeProject1/internal/service"
+	"awesomeProject1/pkg/auth"
+	"awesomeProject1/users/internal/service"
 	"github.com/gin-gonic/gin"
 )
 
 type Handler struct {
-	service service.Auth
+	service      service.Auth
+	tokenManager auth.TokenManager
 }
 
-func NewHandler(service service.Auth) *Handler {
-	return &Handler{service: service}
+func NewHandler(service service.Auth, tm *auth.TokenManager) *Handler {
+	return &Handler{
+		service:      service,
+		tokenManager: *tm,
+	}
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {

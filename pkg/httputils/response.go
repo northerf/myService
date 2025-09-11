@@ -1,4 +1,4 @@
-package handler
+package httputils
 
 import (
 	"github.com/gin-gonic/gin"
@@ -13,8 +13,7 @@ type statusResponse struct {
 	Status string `json:"status"`
 }
 
-func newErrorResponse(c *gin.Context, statusCode int, message string, err error) {
-	// Теперь мы логируем и сообщение для контекста, и саму ошибку
+func NewErrorResponse(c *gin.Context, statusCode int, message string, err error) {
 	logrus.WithFields(logrus.Fields{
 		"error": err.Error(),
 	}).Error(message)

@@ -1,21 +1,24 @@
 package handler
 
 import (
-	"awesomeProject1/schema"
-	"github.com/gin-gonic/gin"
+	"awesomeProject1/pkg/httputils"
+	"awesomeProject1/users/schema"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func (h *Handler) signUp(c *gin.Context) {
 	var input schema.SignUpInput
+	errResponse := httputils.NewErrorResponse
 
 	if err := c.BindJSON(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "Invalid body request", err)
+		errResponse(c, http.StatusBadRequest, "Invalid body request", err)
 		return
 	}
 	id, err := h.service.CreateUser(c.Request.Context(), input.Name, input.Password, input.Email)
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, "Failed to create user", err)
+		errResponse(c, http.StatusInternalServerError, "Failed to create user", err)
 		return
 	}
 
@@ -26,14 +29,16 @@ func (h *Handler) signUp(c *gin.Context) {
 
 func (h *Handler) signIn(c *gin.Context) {
 	var input schema.SignInInput
+	errResponse := httputils.NewErrorResponse
+
 	if err := c.BindJSON(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "Invalid body request", err)
+		errResponse(c, http.StatusBadRequest, "Invalid body request", err)
 		return
 	}
 
 	token, err := h.service.GenerateToken(c.Request.Context(), input.Email, input.Password)
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, "Failed to create token", err)
+		errResponse(c, http.StatusInternalServerError, "Failed to create token", err)
 		return
 	}
 

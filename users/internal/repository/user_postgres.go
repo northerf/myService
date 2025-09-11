@@ -1,8 +1,9 @@
 package repository
 
 import (
-	"awesomeProject1/internal/entity"
+	"awesomeProject1/users/internal/entity"
 	"context"
+
 	"github.com/jmoiron/sqlx"
 )
 

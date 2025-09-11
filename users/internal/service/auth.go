@@ -1,14 +1,15 @@
 package service
 
 import (
-	"awesomeProject1/internal/entity"
-	"awesomeProject1/internal/repository"
+	"awesomeProject1/users/internal/entity"
+	"awesomeProject1/users/internal/repository"
 	"context"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
-	"time"
 )
 
 type AuthService struct {

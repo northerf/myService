@@ -1,12 +1,14 @@
 package main
 
 import (
-	"awesomeProject1/internal/config"
-	"awesomeProject1/internal/handler"
-	"awesomeProject1/internal/repository"
-	"awesomeProject1/internal/service"
-	"github.com/sirupsen/logrus"
+	"awesomeProject1/pkg/auth"
+	"awesomeProject1/users/internal/config"
+	"awesomeProject1/users/internal/handler"
+	"awesomeProject1/users/internal/repository"
+	"awesomeProject1/users/internal/service"
 	"log"
+
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -27,9 +29,11 @@ func main() {
 		logrus.Fatal(err)
 	}
 
+	tokenManager := auth.NewTokenManager([]byte(cfg.JWTSecretKey))
+
 	repos := repository.NewRepository(db)
 	services := service.NewAuthService(repos, []byte(cfg.JWTSecretKey), cfg.TokenTTL)
-	handlers := handler.NewHandler(services)
+	handlers := handler.NewHandler(services, tokenManager)
 
 	router := handlers.InitRoutes()
 
