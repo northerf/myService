@@ -8,3 +8,8 @@ type PostsOutput struct {
 	Content   string     `json:"content"`
 	CreatedAt *time.Time `json:"created_at"`
 }
+
+type CreatePostInput struct {
+	UserID  int64  `json:"user_id" binding:"required"`
+	Content string `json:"content" binding:"required"`
+}

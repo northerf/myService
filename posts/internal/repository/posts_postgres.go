@@ -32,7 +32,7 @@ func (r *PostsRepo) CreatePost(ctx context.Context, post *entity.Post) (postID i
 
 func (r *PostsRepo) ListRecent(ctx context.Context, limit int) ([]entity.Post, error) {
 	var posts []entity.Post
-	query := `SELECT id, user_id, content, created_at FROM posts LIMIT $1`
+	query := `SELECT id as id, user_id, content, created_at FROM posts LIMIT $1`
 	err := r.db.SelectContext(ctx, &posts, query, limit)
 	if err != nil {
 		return nil, err

@@ -4,6 +4,7 @@ import (
 	"awesomeProject1/pkg/httputils"
 	"awesomeProject1/users/schema"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -44,5 +45,25 @@ func (h *Handler) signIn(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"token": token,
+	})
+}
+
+func (h *Handler) getUser(c *gin.Context) {
+	userIDStr := c.Param("id")
+	userID, err := strconv.ParseInt(userIDStr, 10, 64)
+	if err != nil {
+		httputils.NewErrorResponse(c, http.StatusBadRequest, "Invalid user ID", err)
+		return
+	}
+
+	user, err := h.service.GetUserByID(c.Request.Context(), userID)
+	if err != nil {
+		httputils.NewErrorResponse(c, http.StatusNotFound, "User not found", err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"id":   user.ID,
+		"name": user.Name,
 	})
 }

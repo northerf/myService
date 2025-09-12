@@ -3,9 +3,11 @@ package handler
 import (
 	"awesomeProject1/pkg/httputils"
 	"awesomeProject1/posts/schema"
-	"github.com/gin-gonic/gin"
+	"fmt"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 func (h *Handler) listRecent(c *gin.Context) {
@@ -36,4 +38,32 @@ func (h *Handler) listRecent(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, responseData)
+}
+
+func (h *Handler) createPost(c *gin.Context) {
+	var input schema.CreatePostInput
+	errResponse := httputils.NewErrorResponse
+
+	fmt.Printf("Received POST request to create post\n")
+
+	if err := c.BindJSON(&input); err != nil {
+		fmt.Printf("Failed to bind JSON: %v\n", err)
+		errResponse(c, http.StatusBadRequest, "Invalid body request", err)
+		return
+	}
+
+	fmt.Printf("Creating post: userID=%d, content=%s\n", input.UserID, input.Content)
+
+	id, err := h.Service.CreatePost(c.Request.Context(), input.UserID, input.Content)
+	if err != nil {
+		fmt.Printf("Failed to create post: %v\n", err)
+		errResponse(c, http.StatusInternalServerError, "Failed to create post", err)
+		return
+	}
+
+	fmt.Printf("Post created successfully with ID: %d\n", id)
+
+	c.JSON(http.StatusOK, gin.H{
+		"id": id,
+	})
 }

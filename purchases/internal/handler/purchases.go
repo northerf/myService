@@ -5,9 +5,8 @@ import (
 	"awesomeProject1/pkg/httputils"
 	"awesomeProject1/purchases/schema"
 	"errors"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func getUserID(c *gin.Context) (int64, error) {
@@ -15,12 +14,10 @@ func getUserID(c *gin.Context) (int64, error) {
 	if !exists {
 		return 0, errors.New("user id not found in context")
 	}
-
 	id, ok := idInterface.(int64)
 	if !ok {
 		return 0, errors.New("user id is of invalid type in context")
 	}
-
 	return id, nil
 }
 
@@ -31,12 +28,10 @@ func (h *Handler) createPurchase(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
-
 	if err := c.BindJSON(&purchase); err != nil {
 		httputils.NewErrorResponse(c, http.StatusBadRequest, "Invalid body request", err)
 		return
 	}
-
 	id, err := h.service.CreatePurchase(c.Request.Context(), userID, purchase.ItemName, purchase.Amount)
 	if err != nil {
 		httputils.NewErrorResponse(c, http.StatusInternalServerError, "Failed to create purchase", err)
@@ -53,15 +48,12 @@ func (h *Handler) listUserPurchases(c *gin.Context) {
 		httputils.NewErrorResponse(c, http.StatusUnauthorized, "Unauthorized", http.ErrNoCookie)
 		return
 	}
-
 	list, err := h.service.ListPurchases(c.Request.Context(), userID)
 	if err != nil {
 		httputils.NewErrorResponse(c, http.StatusInternalServerError, "Failed to get purchases", err)
 		return
 	}
-
 	var responseData []schema.PurchaseOutput
-
 	for _, purchase := range list {
 		responseData = append(responseData, schema.PurchaseOutput{
 			ID:          purchase.ID,
@@ -70,10 +62,8 @@ func (h *Handler) listUserPurchases(c *gin.Context) {
 			PurchasedAt: purchase.PurchasedAt,
 		})
 	}
-
 	if responseData == nil {
 		responseData = []schema.PurchaseOutput{}
 	}
-
 	c.JSON(http.StatusOK, responseData)
 }

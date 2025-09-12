@@ -64,6 +64,10 @@ func (s *AuthService) GenerateToken(ctx context.Context, email string, password 
 	return tokenString, nil
 }
 
+func (s *AuthService) GetUserByID(ctx context.Context, userID int64) (*entity.User, error) {
+	return s.repo.GetByID(ctx, userID)
+}
+
 func (s *AuthService) ParseToken(tokenString string) (int, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {

@@ -1,16 +1,16 @@
 package handler
 
 import (
-	"awesomeProject1/posts/internal/service"
+	"awesomeProject1/leaders/internal/service"
 
 	"github.com/gin-gonic/gin"
 )
 
 type Handler struct {
-	Service *service.PostsService
+	Service *service.Service
 }
 
-func NewHandler(service *service.PostsService) *Handler {
+func NewHandler(service *service.Service) *Handler {
 	return &Handler{
 		Service: service,
 	}
@@ -21,8 +21,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	api := router.Group("/api")
 	{
-		api.GET("/posts", h.listRecent)
-		api.POST("/posts", h.createPost)
+		api.GET("/leaders", h.getLeaders)
 	}
 
 	return router

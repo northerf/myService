@@ -3,7 +3,6 @@ package handler
 import (
 	"awesomeProject1/pkg/auth"
 	"awesomeProject1/purchases/internal/service"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,7 +17,6 @@ func NewHandler(service service.Purchase, tm *auth.TokenManager) *Handler {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
-
 	api := router.Group("/api", h.tokenManager.Middleware())
 	{
 		api.POST("/purchases", h.createPurchase)

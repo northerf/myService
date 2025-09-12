@@ -2,6 +2,7 @@ package service
 
 import (
 	"awesomeProject1/purchases/internal/entity"
+	"awesomeProject1/purchases/internal/kafka"
 	"awesomeProject1/purchases/internal/repository"
 	"context"
 )
@@ -15,8 +16,8 @@ type Service struct {
 	Purchase
 }
 
-func NewService(repos *repository.Repository) *Service {
+func NewService(repos *repository.Repository, producer *kafka.Producer) *Service {
 	return &Service{
-		Purchase: NewPurchasesServices(repos.PurchaseRepository),
+		Purchase: NewPurchasesServices(repos.PurchaseRepository, producer),
 	}
 }

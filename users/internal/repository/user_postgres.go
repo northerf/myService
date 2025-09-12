@@ -34,3 +34,13 @@ func (r *UserRepo) GetByEmail(ctx context.Context, email string) (*entity.User, 
 	}
 	return &user, nil
 }
+
+func (r *UserRepo) GetByID(ctx context.Context, userID int64) (*entity.User, error) {
+	user := entity.User{}
+	query := `SELECT id, name, email, password_hash FROM users WHERE id = $1`
+	err := r.db.GetContext(ctx, &user, query, userID)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}

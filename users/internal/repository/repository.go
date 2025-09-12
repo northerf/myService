@@ -10,6 +10,7 @@ import (
 type UserRepository interface {
 	Create(ctx context.Context, user *entity.User) (int64, error)
 	GetByEmail(ctx context.Context, email string) (*entity.User, error)
+	GetByID(ctx context.Context, userID int64) (*entity.User, error)
 }
 
 type Repository struct {
